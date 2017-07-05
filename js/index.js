@@ -5,6 +5,7 @@ var canvas = document.querySelector("#canvas")
 var ctx = canvas.getContext("2d")
 var img = new Image()
 img.src = "./images/space1.png";
+var ul = $(".canv ul");
 // 座位
 var arr = [10,10,10,10,10,8,4,10,15]
 // 双击放大缩小
@@ -17,8 +18,9 @@ var scale = 1,sp = 1
 img.onload = function(){
   for (var i = 0; i < arr.length; i++) {
     for (var j = 0; j < arr[i]; j++) {
-      ctx.drawImage(img,0,0,110,106,j*55,i*55,50,50);
+      ctx.drawImage(img,0,0,110,106,j*55+55,i*55,50,50);
     }
+    ul.append("<li>"+i+"</li>")
   }
 }
 
@@ -33,10 +35,17 @@ function selectSeat(e) {
   flagD?p = 320/1000*55:p=55
   var x = Math.floor(e.offsetX / p)
   var y = Math.floor(e.offsetY / p)
+  if (e.offsetX<p) {
+    return
+  }
 // console.log(seat)
+<<<<<<< HEAD
+=======
+// console.log(x)
+>>>>>>> origin/master
   // 首先判断原来这个地方是否有座位可点
   for (var k = 0; k < arr.length; k++) {
-    if (x<arr[k]&&y==k) {
+    if (x-1<arr[k]&&y==k) {
       break
     }
   }
@@ -68,6 +77,7 @@ function selectSeat(e) {
 }
 
 // 记录x,y的初始值,位移值和结束的值
+<<<<<<< HEAD
 var px=0,py=0,movex=0,movey=0,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
 // 记录时间判断是否为双击
 var time = {
@@ -75,6 +85,10 @@ var time = {
   t2:0
 }
 canvas.addEventListener("touchstart",function (e) {
+=======
+var px,py,movex=0,movey=0,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
+/*canvas.addEventListener("touchstart",function (e) {
+>>>>>>> origin/master
   px = e.touches[0].clientX
   py = e.touches[0].clientY
   mouse = e
@@ -83,6 +97,10 @@ canvas.addEventListener("touchstart",function (e) {
 canvas.addEventListener("touchmove",function (e) {
   var x = e.touches[0].clientX
   var y = e.touches[0].clientY
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
   if (e.touches[1]) {
     var x2 = e.touches[1].clientY
     var y2 = e.touches[1].clientY
@@ -90,6 +108,7 @@ canvas.addEventListener("touchmove",function (e) {
   // alert(x2-x)
   movex = x-px
   movey = y-py
+<<<<<<< HEAD
   canvas.style.transform = "translate("+(movex+endx)+"px,"+(movey+endy)+"px)"
 })
 canvas.addEventListener("touchend",function (e) {
@@ -99,6 +118,13 @@ canvas.addEventListener("touchend",function (e) {
   time.t2 = +new Date()
   canvas.style.transformOrigin = "left top"
 
+=======
+  canvas.style.left = (movex+endx) +"px"
+  canvas.style.top = (movey+endy) +"px"
+
+})
+canvas.addEventListener("touchend",function (e) {
+>>>>>>> origin/master
 
   endx = movex+endx
   endy = movey+endy
@@ -146,17 +172,51 @@ function removeTransition() {
 }
 
 
+<<<<<<< HEAD
+=======
+canvas.style.transformOrigin = "left top"
+ */
+
+>>>>>>> origin/master
 
 
+<<<<<<< HEAD
 
+=======
+} );
+
+// 双击放大缩小
+touch.on( "#canvas", "doubletap", function () {
+  flagD = !flagD
+  flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
+  canvas.style.transform = "scale(1)"
+});
+
+// 手指放大缩小
+touch.on("#canvas","pinch",function (e) {
+  // e.scale>=1?e.scale = 1:""
+  // alert(e)
+  // canvas.style.transformOrigin = 160+"px "+200+"px"
+  canvas.style.transform = "scale("+e.scale*scale+")"
+  sp = e.scale
+})
+touch.on("#canvas","pinchend",function () {
+  scale = sp
+})
+*/
+var app = new RTP.PinchZoom($("#canvas"),{})
+>>>>>>> origin/master
 // 点击事件
 $("#canvas").on("click",function (e) {
   selectSeat(e)
 })
+<<<<<<< HEAD
 // $("#canvas").on("dblclick",function (e) {
 //   flagD = !flagD
 //   console.log(flagD)
 //   flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
 //   canvas.style.transform = "scale(1)"
 // })
+=======
+>>>>>>> origin/master
 

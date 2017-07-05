@@ -36,7 +36,7 @@
          * @param options
          * @constructor
          */
-        var PinchZoom = function (el, options) {
+        var PinchZoom = function (el, options,e) {
                 this.el = $(el);
                 this.zoomFactor = 1;
                 this.lastScale = 1;
@@ -50,6 +50,8 @@
                 this.update();
                 // default enable.
                 this.enable();
+            // 喻,自己加的,选座位的参数
+            this.e = e;
 
             },
             sum = function (a, b) {
@@ -151,10 +153,11 @@
              * @param event
              */
             handleDoubleTap: function (event) {
+                // console.log(event)
                 var center = this.getTouches(event)[0],
                     zoomFactor = this.zoomFactor > 1 ? 1 : this.options.tapZoomFactor,
-                    startZoomFactor = this.zoomFactor,
-                    updateProgress = (function (progress) {
+                    startZoomFactor = this.zoomFactor;
+                var updateProgress = (function (progress) {
                         this.scaleTo(startZoomFactor + progress * (zoomFactor - startZoomFactor), center);
                     }).bind(this);
 
@@ -315,7 +318,7 @@
                     updateProgress = (function (progress) {
                         this.offset.x = startOffset.x + progress * (targetOffset.x - startOffset.x);
                         this.offset.y = startOffset.y + progress * (targetOffset.y - startOffset.y);
-                        this.update();
+                        // this.update();
                     }).bind(this);
 
                 this.animate(
@@ -440,9 +443,10 @@
                             if (callback) {
                                 callback();
                             }
-                            this.update();
+                            // 喻,两行注释,解决双击会闪的问题
+                            // this.update();
                             this.stopAnimation();
-                            this.update();
+                            // this.update();
                         } else {
                             if (timefn) {
                                 progress = timefn(progress);
@@ -511,7 +515,8 @@
             end: function () {
                 this.hasInteraction = false;
                 this.sanitize();
-                this.update();
+                // 喻,注释,解决会闪的问题
+                // this.update();
             },
 
             /**
@@ -541,8 +546,8 @@
                     var zoomFactor = this.getInitialZoomFactor() * this.zoomFactor,
                         offsetX = -this.offset.x / zoomFactor,
                         offsetY = -this.offset.y / zoomFactor,
-                        transform3d =   'scale3d('     + zoomFactor + ', '  + zoomFactor + ',1) ' +
-                            'translate3d(' + offsetX    + 'px,' + offsetY    + 'px,0px)',
+                        transform3d =   'scale('     + zoomFactor + ', '  + zoomFactor + ') ' +
+                            'translate(' + offsetX    + 'px,' + offsetY    + 'px)',
                         transform2d =   'scale('       + zoomFactor + ', '  + zoomFactor + ') ' +
                             'translate('   + offsetX    + 'px,' + offsetY    + 'px)',
                         removeClone = (function () {
@@ -692,6 +697,9 @@
                                 target.handleDragEnd(event);
                                 break;
                         }
+                    }else{
+                        // selectSeat(e)
+                        // target.handleDoubleTap(event);
                     }
 
                     if (fingers === 1) {

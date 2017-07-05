@@ -191,3 +191,11 @@ header p {
   top: 0;
   background-color: #efeef4;
 }
+.content .canv ul {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.content .canv ul li {
+  display: block;
+}
