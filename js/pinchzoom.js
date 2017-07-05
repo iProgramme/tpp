@@ -692,6 +692,9 @@
                                 target.handleDragEnd(event);
                                 break;
                         }
+                    }else{
+                        // target.handleDoubleTap(event);
+                        console.log(1)
                     }
 
                     if (fingers === 1) {

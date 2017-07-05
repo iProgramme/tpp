@@ -34,7 +34,7 @@ function selectSeat(e) {
   var x = Math.floor(e.offsetX / p)
   var y = Math.floor(e.offsetY / p)
 // console.log(seat)
-console.log(x)
+// console.log(x)
   // 首先判断原来这个地方是否有座位可点
   for (var k = 0; k < arr.length; k++) {
     if (x<arr[k]&&y==k) {
@@ -70,7 +70,7 @@ console.log(x)
 }
 
 // 记录x,y的初始值,位移值和结束的值
-var px,py,movex,movey,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
+var px,py,movex=0,movey=0,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
 canvas.addEventListener("touchstart",function (e) {
   px = e.touches[0].clientX
   py = e.touches[0].clientY
@@ -81,13 +81,18 @@ canvas.addEventListener("touchstart",function (e) {
 canvas.addEventListener("touchmove",function (e) {
   var x = e.touches[0].clientX
   var y = e.touches[0].clientY
-  var x2 = e.touches[1].clientY
-  var y2 = e.touches[1].clientY
+
+  if (e.touches[1]) {
+    var x2 = e.touches[1].clientY
+    var y2 = e.touches[1].clientY
+  }
+
   // alert(x2-x)
   movex = x-px
   movey = y-py
   canvas.style.left = (movex+endx) +"px"
   canvas.style.top = (movey+endy) +"px"
+
 })
 canvas.addEventListener("touchend",function (e) {
   time2 = new Date()
@@ -123,7 +128,6 @@ canvas.addEventListener("touchend",function (e) {
   py = 0
 
 })
-
 
 // 过渡
 function transitionAll() {
@@ -211,15 +215,10 @@ touch.on("#canvas","pinchend",function () {
   scale = sp
 })
 */
-
+new RTP.PinchZoom($("#canvas"),{})
 // 点击事件
 $("#canvas").on("click",function (e) {
   selectSeat(e)
 })
-$("#canvas").on("dblclick",function (e) {
-  flagD = !flagD
-  console.log(flagD)
-  flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
-  canvas.style.transform = "scale(1)"
-})
+
 
