@@ -71,12 +71,11 @@ function selectSeat(e) {
 
 // 记录x,y的初始值,位移值和结束的值
 var px,py,movex=0,movey=0,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
-canvas.addEventListener("touchstart",function (e) {
+/*canvas.addEventListener("touchstart",function (e) {
   px = e.touches[0].clientX
   py = e.touches[0].clientY
   mouse = e
   removeTransition()
-  time1 = new Date()
 })
 canvas.addEventListener("touchmove",function (e) {
   var x = e.touches[0].clientX
@@ -86,7 +85,6 @@ canvas.addEventListener("touchmove",function (e) {
     var x2 = e.touches[1].clientY
     var y2 = e.touches[1].clientY
   }
-
   // alert(x2-x)
   movex = x-px
   movey = y-py
@@ -95,11 +93,7 @@ canvas.addEventListener("touchmove",function (e) {
 
 })
 canvas.addEventListener("touchend",function (e) {
-  time2 = new Date()
-  // if (time2 - time1<=200) {
-  //   selectSeat(mouse)
-  //   return
-  // }
+
   endx = movex+endx
   endy = movey+endy
   if (endx>=0) {
@@ -129,6 +123,7 @@ canvas.addEventListener("touchend",function (e) {
 
 })
 
+
 // 过渡
 function transitionAll() {
   canvas.style.transition = "all .3s"
@@ -139,6 +134,8 @@ function removeTransition() {
 
 
 canvas.style.transformOrigin = "left top"
+ */
+
 
 // 拖动开始
 /*
@@ -215,7 +212,7 @@ touch.on("#canvas","pinchend",function () {
   scale = sp
 })
 */
-new RTP.PinchZoom($("#canvas"),{})
+var app = new RTP.PinchZoom($("#canvas"),{})
 // 点击事件
 $("#canvas").on("click",function (e) {
   selectSeat(e)

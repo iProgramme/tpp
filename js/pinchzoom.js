@@ -151,10 +151,11 @@
              * @param event
              */
             handleDoubleTap: function (event) {
+                // console.log(event)
                 var center = this.getTouches(event)[0],
                     zoomFactor = this.zoomFactor > 1 ? 1 : this.options.tapZoomFactor,
-                    startZoomFactor = this.zoomFactor,
-                    updateProgress = (function (progress) {
+                    startZoomFactor = this.zoomFactor;
+                var updateProgress = (function (progress) {
                         this.scaleTo(startZoomFactor + progress * (zoomFactor - startZoomFactor), center);
                     }).bind(this);
 
@@ -440,9 +441,10 @@
                             if (callback) {
                                 callback();
                             }
-                            this.update();
+                            // 喻,两行注释,解决双击会闪的问题
+                            // this.update();
                             this.stopAnimation();
-                            this.update();
+                            // this.update();
                         } else {
                             if (timefn) {
                                 progress = timefn(progress);
@@ -511,7 +513,8 @@
             end: function () {
                 this.hasInteraction = false;
                 this.sanitize();
-                this.update();
+                // 喻,注释,解决会闪的问题
+                // this.update();
             },
 
             /**
@@ -541,11 +544,12 @@
                     var zoomFactor = this.getInitialZoomFactor() * this.zoomFactor,
                         offsetX = -this.offset.x / zoomFactor,
                         offsetY = -this.offset.y / zoomFactor,
-                        transform3d =   'scale3d('     + zoomFactor + ', '  + zoomFactor + ',1) ' +
-                            'translate3d(' + offsetX    + 'px,' + offsetY    + 'px,0px)',
+                        transform3d =   'scale('     + zoomFactor + ', '  + zoomFactor + ') ' +
+                            'translate(' + offsetX    + 'px,' + offsetY    + 'px)',
                         transform2d =   'scale('       + zoomFactor + ', '  + zoomFactor + ') ' +
                             'translate('   + offsetX    + 'px,' + offsetY    + 'px)',
                         removeClone = (function () {
+                            console.log(this.clone)
                             if (this.clone) {
                                 this.clone.remove();
                                 delete this.clone;
@@ -694,7 +698,6 @@
                         }
                     }else{
                         // target.handleDoubleTap(event);
-                        console.log(1)
                     }
 
                     if (fingers === 1) {
