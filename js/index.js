@@ -5,6 +5,7 @@ var canvas = document.querySelector("#canvas")
 var ctx = canvas.getContext("2d")
 var img = new Image()
 img.src = "./images/space1.png";
+var ul = $(".canv ul");
 // 座位
 var arr = [10,10,10,10,10,8,4,10,15]
 // 双击放大缩小
@@ -17,8 +18,9 @@ var scale = 1,sp = 1
 img.onload = function(){
   for (var i = 0; i < arr.length; i++) {
     for (var j = 0; j < arr[i]; j++) {
-      ctx.drawImage(img,0,0,110,106,j*55,i*55,50,50);
+      ctx.drawImage(img,0,0,110,106,j*55+55,i*55,50,50);
     }
+    ul.append("<li>"+i+"</li>")
   }
 }
 
@@ -33,11 +35,14 @@ function selectSeat(e) {
   flagD?p = 320/1000*55:p=55
   var x = Math.floor(e.offsetX / p)
   var y = Math.floor(e.offsetY / p)
+  if (e.offsetX<p) {
+    return
+  }
 // console.log(seat)
 // console.log(x)
   // 首先判断原来这个地方是否有座位可点
   for (var k = 0; k < arr.length; k++) {
-    if (x<arr[k]&&y==k) {
+    if (x-1<arr[k]&&y==k) {
       break
     }
   }
@@ -217,5 +222,4 @@ var app = new RTP.PinchZoom($("#canvas"),{})
 $("#canvas").on("click",function (e) {
   selectSeat(e)
 })
-
 

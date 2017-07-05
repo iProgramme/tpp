@@ -36,7 +36,7 @@
          * @param options
          * @constructor
          */
-        var PinchZoom = function (el, options) {
+        var PinchZoom = function (el, options,e) {
                 this.el = $(el);
                 this.zoomFactor = 1;
                 this.lastScale = 1;
@@ -50,6 +50,8 @@
                 this.update();
                 // default enable.
                 this.enable();
+            // 喻,自己加的,选座位的参数
+            this.e = e;
 
             },
             sum = function (a, b) {
@@ -316,7 +318,7 @@
                     updateProgress = (function (progress) {
                         this.offset.x = startOffset.x + progress * (targetOffset.x - startOffset.x);
                         this.offset.y = startOffset.y + progress * (targetOffset.y - startOffset.y);
-                        this.update();
+                        // this.update();
                     }).bind(this);
 
                 this.animate(
@@ -549,7 +551,6 @@
                         transform2d =   'scale('       + zoomFactor + ', '  + zoomFactor + ') ' +
                             'translate('   + offsetX    + 'px,' + offsetY    + 'px)',
                         removeClone = (function () {
-                            console.log(this.clone)
                             if (this.clone) {
                                 this.clone.remove();
                                 delete this.clone;
@@ -697,6 +698,7 @@
                                 break;
                         }
                     }else{
+                        // selectSeat(e)
                         // target.handleDoubleTap(event);
                     }
 
