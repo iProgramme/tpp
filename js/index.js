@@ -34,7 +34,6 @@ function selectSeat(e) {
   var x = Math.floor(e.offsetX / p)
   var y = Math.floor(e.offsetY / p)
 // console.log(seat)
-console.log(x)
   // 首先判断原来这个地方是否有座位可点
   for (var k = 0; k < arr.length; k++) {
     if (x<arr[k]&&y==k) {
@@ -54,7 +53,6 @@ console.log(x)
       return
     }
   }
-  console.log(seat)
   // 判断若已选5个,则不能继续选取
   if(seat.length>=5){
     return
@@ -70,52 +68,66 @@ console.log(x)
 }
 
 // 记录x,y的初始值,位移值和结束的值
-var px,py,movex,movey,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
+var px=0,py=0,movex=0,movey=0,endx=0,endy=0,time1 = null,time2 = null,mouse = null;
+// 记录时间判断是否为双击
+var time = {
+  t1:0,
+  t2:0
+}
 canvas.addEventListener("touchstart",function (e) {
   px = e.touches[0].clientX
   py = e.touches[0].clientY
   mouse = e
   removeTransition()
-  time1 = new Date()
 })
 canvas.addEventListener("touchmove",function (e) {
   var x = e.touches[0].clientX
   var y = e.touches[0].clientY
-  var x2 = e.touches[1].clientY
-  var y2 = e.touches[1].clientY
+  if (e.touches[1]) {
+    var x2 = e.touches[1].clientY
+    var y2 = e.touches[1].clientY
+  }
   // alert(x2-x)
   movex = x-px
   movey = y-py
-  canvas.style.left = (movex+endx) +"px"
-  canvas.style.top = (movey+endy) +"px"
+  canvas.style.transform = "translate("+(movex+endx)+"px,"+(movey+endy)+"px)"
 })
 canvas.addEventListener("touchend",function (e) {
-  time2 = new Date()
-  // if (time2 - time1<=200) {
-  //   selectSeat(mouse)
-  //   return
-  // }
+  time.t1 = +new Date()
+  time.t1 = time.t2
+  // console.log(time.t1)
+  time.t2 = +new Date()
+  canvas.style.transformOrigin = "left top"
+
+
   endx = movex+endx
   endy = movey+endy
   if (endx>=0) {
-    transitionAll()
-    canvas.style.left = 0 +"px"
     endx = 0
   }
   if (endx<=-680) {
-    transitionAll()
-    canvas.style.left = "-680px"
     endx = -680
   }
   if (endy>=0) {
-    transitionAll()
-    canvas.style.top = 0 +"px"
     endy = 0
   }
   if (endy<=-200) {
-    transitionAll()
-    canvas.style.top = "-200px"
     endy = -200
+  }
+  // 若 true 说明是双击事件
+  if (time.t2-time.t1<300) {
+    // console.log("双击")
+    transitionAll()
+    flagD = !flagD
+    if (flagD) {
+
+      canvas.style.transform = "scale(0.32) "
+    }else{
+      canvas.style.transformOrigin = "0px 0px"
+      canvas.style.transform = "translate(-"+(e.changedTouches[0].clientX/32*100-160)+"px,-"+(e.changedTouches[0].clientY-200)/32*100+"px) scale(1)"
+
+    }
+    setTimeout(removeTransition,400)
   }
   movex = 0
   movey = 0
@@ -134,92 +146,17 @@ function removeTransition() {
 }
 
 
-canvas.style.transformOrigin = "left top"
 
-// 拖动开始
-/*
-touch.on( "#canvas", "swipestart", function (e) {
-  px = e.distanceX
-  py = e.distanceY
-  removeTransition()
-} );
-// 拖动中
-touch.on( "#canvas", "swiping", function (e) {
-  console.log(e)
-  var x = e.distanceX
-  var y = e.distanceY
-  movex = x-px
-  movey = y-py
-  canvas.style.left = (movex+endx) +"px"
-  canvas.style.top = (movey+endy) +"px"
-} );
-// 拖动结束
-touch.on( "#canvas", "swipeend", function () {
-  endx = movex+endx
-  endy = movey+endy
-  if (endx>=0) {
-    transitionAll()
-    canvas.style.left = 0 +"px"
-    endx = 0
-  }
-  if (endx<=-680) {
-    transitionAll()
-    canvas.style.left = "-680px"
-    endx = -680
-  }
-  // 宽高随着缩放
-  if (flagD) {
-    transitionAll()
-    canvas.style.left = "0px"
-    canvas.style.top = "0px"
-    endy = 0
-    endx = 0
-  }
-  if (endy>=0) {
-    transitionAll()
-    canvas.style.top = 0 +"px"
-    endy = 0
-  }
-  if (endy<=-200) {
-    transitionAll()
-    canvas.style.top = "-200px"
-    endy = -200
-  }
-  movex = 0
-  movey = 0
-  px = 0
-  py = 0
 
-} );
-
-// 双击放大缩小
-touch.on( "#canvas", "doubletap", function () {
-  flagD = !flagD
-  flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
-  canvas.style.transform = "scale(1)"
-});
-
-// 手指放大缩小
-touch.on("#canvas","pinch",function (e) {
-  // e.scale>=1?e.scale = 1:""
-  // alert(e)
-  // canvas.style.transformOrigin = 160+"px "+200+"px"
-  canvas.style.transform = "scale("+e.scale*scale+")"
-  sp = e.scale
-})
-touch.on("#canvas","pinchend",function () {
-  scale = sp
-})
-*/
 
 // 点击事件
 $("#canvas").on("click",function (e) {
   selectSeat(e)
 })
-$("#canvas").on("dblclick",function (e) {
-  flagD = !flagD
-  console.log(flagD)
-  flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
-  canvas.style.transform = "scale(1)"
-})
+// $("#canvas").on("dblclick",function (e) {
+//   flagD = !flagD
+//   console.log(flagD)
+//   flagD?(canvas.style.width = "100%",canvas.style.left="0px"):canvas.style.width = "auto"
+//   canvas.style.transform = "scale(1)"
+// })
 
